@@ -7,7 +7,8 @@ export const Details = ({navigation, route}) => {
   return (
     <Container>
       <Text style={styles.text}>
-        Details with params {route.params.id} and {route.params.name}
+        Details with params
+        {/* {route.params.id_kvhc} and {route.params.name} */}
       </Text>
       <Button
         color="blue"

@@ -1,17 +1,20 @@
 import React from 'react';
-import {View, Text, Button, StyleSheet} from 'react-native';
+import {View, Text, Button, StyleSheet, StatusBar} from 'react-native';
 import {Container} from './Container';
-export const Home = ({navigation, route}) => {
-  // console.log('route kvhc from home :', route);
+import {useTheme} from '@react-navigation/native';
+export const Home = props => {
+  let {navigation, route} = props;
+  // console.log('route nagigation from home====== :', route);
+  const {colors} = useTheme();
   return (
     <Container>
-      <Text style={styles.text}>Home</Text>
+      <Text style={{color: colors.text}}>Home</Text>
       <Button
         title="Go to Details"
         onPress={() =>
           navigation.navigate('Details', {
-            // id: 22,
-            name: 'from screen home',
+            // id: route.params.id_kvhc,
+            name: 'from screen home1',
           })
         }
       />

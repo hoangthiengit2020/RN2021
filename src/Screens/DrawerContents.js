@@ -1,7 +1,8 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, StyleSheet, Linking, ImageBackground} from 'react-native';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import {
+  useTheme,
   Avatar,
   Title,
   Caption,
@@ -18,24 +19,36 @@ import {Container} from './Container';
 import {color} from 'react-native-reanimated';
 import img from '../assets/images/wave.jpg';
 import API_KVHC from '../API/API_KVHC';
+import {AuthContext} from '../components/context';
+import {Colors} from 'react-native/Libraries/NewAppScreen';
 export const DrawerContents = props => {
+  console.log('this is prop of drawer', props);
   // console.log('props is:  ', props.activeTintColor);
-  const [isDarkTheme, setIsDarkTheme] = React.useState(false);
+  // const [isDarkTheme, setIsDarkTheme] = React.useState(false);
+  const paperTheme = useTheme();
   const [dataKVHCCha, setDataKVHCCha] = React.useState([]);
   const [dataKVHCCapXa, setDataKVHCCapXa] = React.useState([]);
-
+  const {signOut, toggleTheme} = useContext(AuthContext);
   React.useEffect(() => {
-    API_KVHC.GetKHVC_Cha().then(res => {
-      setDataKVHCCha(res.data);
-    });
-    API_KVHC.GetKVHC_Con(731).then(res => {
-      console.log('kvhcon', res.data);
-      setDataKVHCCapXa(res.data);
-    });
+    API_KVHC.GetKHVC_Cha()
+      .then(res => {
+        setDataKVHCCha(res.data);
+      })
+      .catch(err => {
+        return err;
+      });
+    API_KVHC.GetKVHC_Con(731)
+      .then(res => {
+        console.log('kvhcon', res.data);
+        setDataKVHCCapXa(res.data);
+      })
+      .catch(err => {
+        return err;
+      });
   }, []);
-  const toggleTheme = () => {
-    setIsDarkTheme(!isDarkTheme);
-  };
+  // const toggleTheme = () => {
+  //   setIsDarkTheme(!isDarkTheme);
+  // };
   return (
     <View style={{flex: 1}}>
       <DrawerContentScrollView {...props}>
@@ -51,12 +64,16 @@ export const DrawerContents = props => {
               <View style={{flexDirection: 'row', marginBottom: 10}}>
                 <Avatar.Image
                   source={{
-                    uri: 'https://miro.medium.com/max/1094/1*S-a7sHCYc9pwqh1LSDl4_w.jpeg',
+                    uri: 'https://thiepmung.com/images/frame/frame_icon/in-hinh-len-huy-hieu-4005780582177111.jpg',
                   }}
                   size={50}
                 />
                 <View style={{marginLeft: 15, flexDirection: 'column'}}>
-                  <Title style={styles.title}>Hoàng Thiện</Title>
+                  <Title style={styles.title}>
+                    {props.loginState.userName !== undefined
+                      ? props.loginState.userName
+                      : props.loginState.userToken}
+                  </Title>
                   <Caption style={styles.caption}>Nodemon</Caption>
                 </View>
               </View>
@@ -89,14 +106,14 @@ export const DrawerContents = props => {
                     icon={({activeTintColor, size}) => (
                       <MaterialCommunityIcons
                         name="map"
-                        color={'#d02860'}
+                        color={'#8B40E8'}
                         size={size}
                       />
                     )}
                     label={item.ten}
-                    labelStyle={{color: 'blue', fontWeight: 'bold'}}
+                    labelStyle={{fontWeight: 'bold'}}
                     onPress={() => {
-                      alert(item.maKvhc);
+                      // alert(item.maKvhc);
                       // props.navigation.navigate('Home', {
                       //   screen: 'Details',
                       //   params: {
@@ -104,7 +121,10 @@ export const DrawerContents = props => {
                       //     name: 'name from drawerScreen',
                       //   },
                       // });
-                      props.navigation.navigate('Home', {id_kvhc: item.maKvhc});
+
+                      props.navigation.navigate('Home', {
+                        id_kvhc: item.maKvhc,
+                      });
                     }}
                   />
                 );
@@ -112,11 +132,14 @@ export const DrawerContents = props => {
           </Drawer.Section>
           {/* switch dark theme  */}
           <Drawer.Section title="Preferences">
-            <TouchableRipple onPress={toggleTheme}>
+            <TouchableRipple
+              onPress={() => {
+                toggleTheme();
+              }}>
               <View style={styles.preference}>
                 <Text>Dark Theme</Text>
                 <View pointerEvents="none">
-                  <Switch value={isDarkTheme} color="red" />
+                  <Switch value={paperTheme.dark} color="red" />
                 </View>
               </View>
             </TouchableRipple>
@@ -132,9 +155,7 @@ export const DrawerContents = props => {
           )}
           label="Đăng xuất"
           labelStyle={{color: 'red'}}
-          onPress={() => {
-            alert('dfd');
-          }}
+          onPress={signOut}
         />
       </Drawer.Section>
     </View>

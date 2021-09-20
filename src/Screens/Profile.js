@@ -3,9 +3,10 @@ import {Container} from './Container';
 import {Text} from 'react-native';
 
 export const Profile = ({route}) => {
+  console.log(route);
   return (
     <Container>
-      <Text>Profile {route.params.id_kvhc}</Text>
+      <Text>Profile </Text>
     </Container>
   );
 };

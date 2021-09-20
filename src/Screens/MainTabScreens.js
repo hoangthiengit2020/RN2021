@@ -9,10 +9,11 @@ import {Details} from './Details';
 import Explorer from './Explorer';
 import {Profile} from './Profile';
 import Notification from './Notification';
+
 const HomeStack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
-const MainTabScreens = () => {
-  // console.log('route from home:', route);
+const MainTabScreens = ({route}) => {
+  console.log('route from home:', route);
   return (
     <Tab.Navigator
       // initialRouteName="Home"
@@ -22,7 +23,7 @@ const MainTabScreens = () => {
         component={HomeStackScreen}
         options={{
           tabBarLabel: 'Home',
-          tabBarColor: '#009388',
+          tabBarColor: '#8B40E8',
           tabBarIcon: ({color}) => (
             <MaterialCommunityIcons name="home" color={color} size={26} />
           ),
@@ -67,13 +68,18 @@ const MainTabScreens = () => {
 };
 
 const HomeStackScreen = ({navigation, route}) => {
-  console.log('route from home stack: ', route, ' navigation ', navigation);
+  // console.log(
+  //   'route and navigation from home stack      : ',
+  //   route,
+  //   '--navigation---',
+  //   navigation,
+  // );
   return (
     <HomeStack.Navigator
       screenOptions={{
         headerTintColor: 'white',
         headerStyle: {
-          backgroundColor: '#009388',
+          backgroundColor: '#8B40E8',
         },
         headerTitleStyle: {
           fontWeight: 'bold',
@@ -85,13 +91,16 @@ const HomeStackScreen = ({navigation, route}) => {
       <HomeStack.Screen
         name="Home"
         component={Home}
+        // initialParams={{
+        //   id_kvhc: route.params == undefined ? 26377 : route.params.id_kvhc,
+        // }}
         options={{
           //   title: 'Overview',
           headerRight: () => (
             <Feather.Button
               name="menu"
               size={20}
-              backgroundColor="#009388"
+              backgroundColor="#8B40E8"
               onPress={() => {
                 navigation.toggleDrawer();
               }}
@@ -103,21 +112,21 @@ const HomeStackScreen = ({navigation, route}) => {
         name="Details"
         component={Details}
         options={({route}) => ({
-          title: route.params.name,
+          // title: route.params.name,
           headerRight: () => (
             <Feather.Button
               name="menu"
               size={20}
-              backgroundColor="#009388"
+              backgroundColor="#6000D2"
               onPress={() => {
                 navigation.toggleDrawer();
               }}
             />
           ),
         })}
-        initialParams={{
-          id: route.params == undefined ? 26377 : route.params.id_kvhc,
-        }}
+        // initialParams={{
+        //   id: route.params == undefined ? 26377 : route.params.id_kvhc,
+        // }}
       />
     </HomeStack.Navigator>
   );
